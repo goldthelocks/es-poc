@@ -1,32 +1,24 @@
-package com.es.poc.main.configuration;
+package com.es.poc.main.helper;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.settings.Settings.Builder;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Eraine Otayde
  *
  */
-//@Configuration
-public class ElasticSearchConfig {
+@Component
+public class ESHelper {
 
-	@Value("${es.nodes}")
-	private String[] nodes;
-
-	@Value("${es.cluster.name}")
-	private String clusterName;
-
-	@Bean
-	public TransportClient elasticClient() throws NumberFormatException, UnknownHostException {
+	public Client createClient(String[] nodes, String clusterName) throws NumberFormatException, UnknownHostException {
 		Builder settingsBuilder = Settings.builder();
 		settingsBuilder.put("cluster.name", clusterName);
 
@@ -39,5 +31,4 @@ public class ElasticSearchConfig {
 
 		return client;
 	}
-
 }

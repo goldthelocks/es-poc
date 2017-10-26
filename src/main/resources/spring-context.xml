@@ -8,6 +8,17 @@
 						http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 	<context:component-scan base-package="com.es.poc.main" />
+
+	<bean id="clientFactory" class="com.es.poc.main.helper.ESHelper"></bean>
+	<bean id="client" factory-method="createClient" factory-bean="clientFactory">
+		<constructor-arg index="0" value="${es.nodes}" />
+		<constructor-arg index="1" value="${es.cluster.name}" />
+	</bean>
+		
+<!-- 	<bean id="client" class="com.es.poc.main.helper.ESHelper" factory-method="createClient">
+		<constructor-arg index="0" value="${es.nodes}" />
+		<constructor-arg index="1" value="${es.cluster.name}" />
+	</bean> -->
 	
 	<bean id="appProperties"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

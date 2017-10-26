@@ -61,7 +61,7 @@ public class PetServiceImpl implements PetService {
 	public UpdateResponse updatePet(PetDocument document) {
 		UpdateRequestBuilder request = client.prepareUpdate(document.getIndex(), document.getDocType(),
 				document.getId().toString());
-		request.setDoc(document.toJson(), XContentType.JSON);
+		request.setDoc(document.toJson(), XContentType.JSON);		
 		
 		UpdateResponse response = request.execute().actionGet();
 		
@@ -89,7 +89,7 @@ public class PetServiceImpl implements PetService {
 		SearchResponse response = request.execute().actionGet();
 
 		SearchHit[] hits = response.getHits().getHits();
-
+		
 		if (hits.length > 0) {
 			ObjectMapper mapper = new ObjectMapper();
 			String result;
@@ -110,12 +110,13 @@ public class PetServiceImpl implements PetService {
 		}
 
 		if (searchParam.getName() != null) {
-			boolQuery.filter(QueryBuilders.termQuery("name", searchParam.getName()));
+			boolQuery.filter(QueryBuilders.wildcardQuery("name", "*" + searchParam.getName() + "*"));
 		}
 
 		if (searchParam.getCategory() != null) {
 			boolQuery.filter(QueryBuilders.termQuery("category", searchParam.getCategory()));
-		}
+		}			
+		
 	}
 
 }
